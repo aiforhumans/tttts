@@ -1,0 +1,22 @@
+{
+  "summary": "Current issues and troubleshooting steps for TTS model loading error",
+  "tried": [
+    "Replaced invalid model 'tts_models/en/ljspeech/fastspeech2' with valid 'tts_models/en/ljspeech/fast_pitch' in app.py",
+    "Verified available models using list_models.py and confirmed 'fast_pitch' is a valid model",
+    "Attempted to download 'fast_pitch' model explicitly using a custom script",
+    "Checked TTS model cache directory; found empty indicating no cached models",
+    "Added error logging to JSON file in app.py to capture errors during model loading and synthesis",
+    "Performed critical-path testing by launching the app and verifying basic functionality",
+    "Observed repeated 'Model file not found in the output path' errors in logs and terminal",
+    "Confirmed TTS package version is 0.22.0 as per requirements.txt"
+  ],
+  "to_resolve": [
+    "Investigate why the 'fast_pitch' model files are not being downloaded or found by the TTS package",
+    "Check for possible issues with TTS package version compatibility or bugs in model download manager",
+    "Consider clearing any hidden or alternate cache directories used by TTS package",
+    "Possibly reinstall or upgrade TTS package to latest version to fix model download issues",
+    "Verify network or permission issues that might block model downloads",
+    "Improve error handling and user feedback in the app for model loading failures",
+    "Test with alternative valid models to isolate if issue is specific to 'fast_pitch' model"
+  ]
+}
