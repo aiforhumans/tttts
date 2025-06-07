@@ -1,0 +1,22 @@
+Update Summary for app.py:
+
+- Fixed model path for VCTK from "tts_models/en/vctk/tacotron2-DDC" to "tts_models/en/vctk/vits" based on available models.
+- Added support for multi-speaker models by:
+  - Detecting if the loaded model has multiple speakers.
+  - Adding a speaker selection dropdown in the Gradio UI that updates dynamically when the model changes.
+  - Passing the selected speaker parameter to the TTS synthesis function.
+- Modified the synthesize_speech function to accept a speaker argument and use it when synthesizing speech.
+- Added logic to update the speaker dropdown choices when the user selects a different voice model.
+- Ensured backward compatibility for single-speaker models by conditionally including the speaker parameter.
+- Created an output folder "output" if it does not exist to save generated audio files.
+- The UI now includes inputs for text, voice model, speech speed, and speaker selection (if applicable).
+- The app runs on a local URL and supports GPU acceleration if available.
+
+Please test the following:
+- UI loads and all controls are functional.
+- Selecting different voice models updates the speaker list correctly.
+- Speech synthesis works for both single-speaker and multi-speaker models.
+- Generated audio files are saved in the output folder.
+- Audio playback works as expected.
+
+This update addresses the previous errors related to missing speaker parameters for multi-speaker models.
