@@ -23,12 +23,16 @@ This app supports multiple voice models, adjustable speech speed, and saves gene
 - 💾 Automatic saving of generated audio files in `output/` folder with timestamped filenames
 - 🖥️ Intuitive and responsive UI built with Gradio
 - 🔄 Dynamic model loading to optimize resource usage
+- 🧠 Lazy model initialization with in-memory caching
+- 🎧 Preview voices using local sample clips
+- 📦 Batch synthesis via text box or uploaded file
+- 🌐 Optional Edge TTS backend for additional voices
 
 ---
 
 ## Architecture and Workflow
 
-1. **Model Management**: The app maintains a dictionary of available TTS models. When a user selects a different voice model, the app dynamically loads the corresponding model onto the GPU.
+1. **Model Management**: The app maintains a dictionary of available TTS models with lazy initialization and caching. Models are loaded on first use and kept in memory (up to two at a time). Edge TTS voices are supported as an alternative backend.
 2. **Speech Synthesis**: Upon text input and parameter selection, the app synthesizes speech using the selected model and speed setting, saving the output as a WAV file.
 3. **User Interface**: Gradio provides a clean interface with text input, model selector, speed slider, and audio playback components. The "Generate Speech" button triggers synthesis and updates the audio output.
 4. **File Management**: Generated audio files are saved in the `output/` directory with filenames including timestamps to avoid overwriting and facilitate organization.
@@ -90,6 +94,9 @@ python app.py
 - Click the "Generate Speech 🎙️" button.
 - Listen to the generated audio in the player.
 - All generated audio files are saved in the `output/` folder with timestamped filenames.
+- Use "Preview Voice" to listen to a short sample before generating.
+- For multiple lines, enter text in the batch box or upload a `.txt` file and click "Batch Generate" to download a zip archive.
+- Place optional preview clips in the `samples/` directory with filenames matching the dropdown labels.
 
 ---
 
