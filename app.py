@@ -9,6 +9,17 @@ import json
 import traceback
 import zipfile
 
+# Fetch list of available Edge TTS voices
+def fetch_edge_voices():
+    """Return list of Edge TTS voice short names."""
+    try:
+        voices = asyncio.run(edge_tts.list_voices())
+        return [voice["ShortName"] for voice in voices]
+    except Exception as e:
+        # Log the error but fall back to a single default voice
+        log_error_to_json(f"Failed to fetch Edge voices: {str(e)}")
+        return ["en-US-GuyNeural"]
+
 # Available models (backend, model identifier)
 MODELS = {
     "LJSpeech - Tacotron2-DDC": ("coqui", "tts_models/en/ljspeech/tacotron2-DDC"),
@@ -31,8 +42,6 @@ tts = None
 OUTPUT_FOLDER = "output"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# Local samples for model preview
-SAMPLES = {name: os.path.join("samples", name.replace(" ", "_") + ".wav") for name in MODELS}
 
 def preprocess_text(text: str) -> str:
     """Simple text normalization before synthesis."""
@@ -85,6 +94,14 @@ def log_error_to_json(error_message):
         logs = logs[-500:]
     with open(log_file, "w", encoding="utf-8") as f:
         json.dump(logs, f, indent=4)
+
+# Extend MODELS with all available Edge voices
+EDGE_VOICES = fetch_edge_voices()
+for voice in EDGE_VOICES:
+    MODELS[f"EdgeTTS - {voice}"] = ("edge", voice)
+
+# Local samples for model preview
+SAMPLES = {name: os.path.join("samples", name.replace(" ", "_") + ".wav") for name in MODELS}
 
 def synthesize_speech(text, model_name, speed, speaker):
     global tts, current_model_name, current_speaker
@@ -164,7 +181,7 @@ with gr.Blocks() as demo:
             text_input = gr.Textbox(label="Enter text", lines=5, placeholder="Type something here...")
             model_selector = gr.Dropdown(label="Select Voice Model", choices=list(MODELS.keys()), value=list(MODELS.keys())[0])
             speed_slider = gr.Slider(label="Speech Speed", minimum=0.5, maximum=1.5, value=1.0, step=0.05)
-            speaker_selector = gr.Dropdown(label="Select Speaker", choices=speakers, value=current_speaker if current_speaker else None, visible=bool(speakers))
+            speaker_selector = gr.Dropdown(label="Select Speaker", choices=[], value=None, visible=False)
             generate_button = gr.Button("Generate Speech 🎙️")
             preview_button = gr.Button("Preview Voice 🎧")
             batch_text = gr.Textbox(label="Batch Text (one line per item)", lines=5)
