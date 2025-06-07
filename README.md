@@ -26,13 +26,14 @@ This app supports multiple voice models, adjustable speech speed, and saves gene
 - 🧠 Lazy model initialization with in-memory caching
 - 🎧 Preview voices using local sample clips
 - 📦 Batch synthesis via text box or uploaded file
-- 🌐 Optional Edge TTS backend for additional voices
+- 🌐 Optional Edge TTS backend automatically loading all available voices
+- 📝 `list_edge_voices.py` script prints the full list of online voices
 
 ---
 
 ## Architecture and Workflow
 
-1. **Model Management**: The app maintains a dictionary of available TTS models with lazy initialization and caching. Models are loaded on first use and kept in memory (up to two at a time). Edge TTS voices are supported as an alternative backend.
+1. **Model Management**: The app maintains a dictionary of available TTS models with lazy initialization and caching. Models are loaded on first use and kept in memory (up to two at a time). When network access is available, all Edge TTS voices are retrieved via the online API and added to the dropdown.
 2. **Speech Synthesis**: Upon text input and parameter selection, the app synthesizes speech using the selected model and speed setting, saving the output as a WAV file.
 3. **User Interface**: Gradio provides a clean interface with text input, model selector, speed slider, and audio playback components. The "Generate Speech" button triggers synthesis and updates the audio output.
 4. **File Management**: Generated audio files are saved in the `output/` directory with filenames including timestamps to avoid overwriting and facilitate organization.
@@ -97,6 +98,7 @@ python app.py
 - Use "Preview Voice" to listen to a short sample before generating.
 - For multiple lines, enter text in the batch box or upload a `.txt` file and click "Batch Generate" to download a zip archive.
 - Place optional preview clips in the `samples/` directory with filenames matching the dropdown labels.
+- Run `python list_edge_voices.py` to print all Edge TTS voices available online.
 
 ---
 
